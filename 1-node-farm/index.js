@@ -29,12 +29,20 @@ const url = require('url');
 // console.log('Will read file!'); // Displays before file contents
 
 /////////////////////////// SERVER /////////////////////////////////
+
+// Top-level code - executes only once; ok to use blocking
+const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, 'utf-8');
+const dataObject = JSON.parse(data);
+
 const server = http.createServer((req, res) => {
   const pathName = req.url;
   if (pathName === '/' || pathName === '/overview') {
     res.end('This is the OVERVIEW');
   } else if (pathName === '/product') {
     res.end('This is the PRODUCT');
+  } else if (pathName === '/api') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(data);
   } else {
     // Status and headers must be defined before response is sent
     res.writeHead(404, {
@@ -43,8 +51,6 @@ const server = http.createServer((req, res) => {
     });
     res.end('<h1>Page not found!</h1>');
   }
-
-  res.end('Hello from the server!');
 });
 
 server.listen(8000, '127.0.0.1', () => {
