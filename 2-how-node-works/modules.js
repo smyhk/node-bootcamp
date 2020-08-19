@@ -11,7 +11,7 @@ console.log(calc1.add(2, 5));
 const { add, multiply, divide } = require('./test-module-2');
 console.log(multiply(5, 5));
 
-// caching
+// caching - does not re-load to module each call
 require('./test-module-3')();
 require('./test-module-3')();
 require('./test-module-3')();
