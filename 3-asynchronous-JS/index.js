@@ -46,7 +46,7 @@ const getDogPic = async () => {
   return '2: READY';
 };
 
-// Call function
+// Call function with IIFE
 (async () => {
   try {
     console.info('1: Will get dog pics!!');
