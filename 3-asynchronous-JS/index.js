@@ -20,7 +20,56 @@ const writeFilePro = (file, data) => {
   });
 };
 
+// Async/await function
+const getDogPic = async () => {
+  try {
+    const data = await readFilePro(`${__dirname}/dog.txt`);
+    console.log(`Breed: ${data}`);
+
+    const res = await superagent.get(
+      `https://dog.ceo/api/breed/${data}/images/random`
+    );
+    console.log(res.body.message);
+
+    await writeFilePro('dog-img.txt', res.body.message);
+    console.log('Random dog image saved to file');
+  } catch (err) {
+    if (err.message) {
+      console.error(err.message);
+    } else {
+      console.error(err);
+    }
+
+    throw err;
+  }
+
+  return '2: READY';
+};
+
 // Call function
+(async () => {
+  try {
+    console.info('1: Will get dog pics!!');
+    console.log(await getDogPic());
+    console.info('3: Done getting dog pics!');
+  } catch (err) {
+    console.error(err);
+  }
+})();
+
+/*
+console.info('1: Will get dog pics!!');
+// Captures the return value of the entire async function
+getDogPic()
+  .then((x) => {
+    console.info(x);
+    console.info('3: Done getting dog pics!');
+  })
+  .catch((err) => {
+    console.error(err);
+  });
+*/
+/*
 readFilePro(`${__dirname}/dog.txt`)
   .then((data) => {
     console.log(`Breed: ${data}`);
@@ -40,3 +89,4 @@ readFilePro(`${__dirname}/dog.txt`)
       return console.error(err);
     }
   });
+  */
