@@ -1,8 +1,21 @@
 const fs = require('fs');
+const { fail } = require('assert');
 
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
 );
+
+// Param middleware
+exports.checkId = (req, res, next, val) => {
+  console.log(`Tour id is: ${val}`);
+  if (req.params.id * 1 > tours.length) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'Invalid id',
+    });
+  }
+  next();
+};
 
 exports.getAllTours = (req, res) => {
   console.log(req.requestTime);
@@ -18,16 +31,7 @@ exports.getAllTours = (req, res) => {
 
 exports.getTour = (req, res) => {
   const id = parseInt(req.params.id);
-  // const id = req.params.id * 1;
   const tour = tours.find((tour) => tour.id === id);
-
-  //if (id > tours.length) {
-  if (!tour) {
-    return res.status(404).json({
-      status: 'fail',
-      message: 'invalid id',
-    });
-  }
 
   res.status(200).json({
     status: 'success',
@@ -60,32 +64,25 @@ exports.updateTour = async (req, res) => {
   const id = parseInt(req.params.id);
   const tour = tours.find((tour) => tour.id === id);
 
-  if (!tour) {
-    return res.status(404).json({
-      status: 'fail',
-      message: 'invalid id',
-    });
-  }
+  // const index = tours.findIndex((el) => el.id === id);
+  // const updatedTour = {
+  //   ...tour,
+  //   ...req.body,
+  // };
+  // tours[index] = updatedTour;
 
-  const index = tours.findIndex((el) => el.id === id);
-  const updatedTour = {
-    ...tour,
-    ...req.body,
-  };
-  tours[index] = updatedTour;
-
-  await fs.writeFile(
-    `${__dirname}/dev-data/data/tours-simple.json`,
-    JSON.stringify(tours),
-    (err) => {
-      res.status(200).json({
-        message: 'Tour Updated',
-        data: {
-          updatedTour,
-        },
-      });
-    }
-  );
+  // await fs.writeFile(
+  //   `${__dirname}/dev-data/data/tours-simple.json`,
+  //   JSON.stringify(tours),
+  //   (err) => {
+  //     res.status(200).json({
+  //       message: 'Tour Updated',
+  //       data: {
+  //         updatedTour,
+  //       },
+  //     });
+  //   }
+  // );
 
   res.status(200).json({
     status: 'success',
