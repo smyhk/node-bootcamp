@@ -1,9 +1,11 @@
 const express = require('express');
 const fs = require('fs');
+const morgan = require('morgan');
 
 const app = express();
 
 // Middleware stack
+app.use(morgan('dev'));
 app.use(express.json());
 
 app.use((req, res, next) => {
@@ -20,6 +22,7 @@ const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
 
+// Route handlers
 const getAllTours = (req, res) => {
   console.log(req.requestTime);
   res.status(200).json({
@@ -132,6 +135,7 @@ app
   .patch(updateTour)
   .delete(deleteTour);
 
+// Start server
 const PORT = 3000;
 app.listen(PORT, () => {
   console.info(`App running on port ${PORT}.`);
