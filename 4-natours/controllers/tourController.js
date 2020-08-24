@@ -1,5 +1,4 @@
 const fs = require('fs');
-const { fail } = require('assert');
 
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
