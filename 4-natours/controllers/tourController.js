@@ -20,8 +20,6 @@ exports.createTour = async (req, res) => {
 
 exports.getAllTours = async (req, res) => {
   try {
-    console.log(req.query);
-
     // Build query and filter
     const queryObject = { ...req.query };
     const excludedFields = ['page', 'sort', 'limit', 'fields'];
@@ -43,6 +41,14 @@ exports.getAllTours = async (req, res) => {
       // sort('price', 'ratingsAverge')
     } else {
       query = query.sort('-createdAt');
+    }
+
+    // Field limiting
+    if (req.query.fields) {
+      const fields = req.query.fields.split(',').join(' ');
+      query = query.select(fields);
+    } else {
+      query = query.select('-__v -createdAt -updatedAt');
     }
 
     // Execute query
