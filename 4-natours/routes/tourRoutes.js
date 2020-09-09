@@ -5,6 +5,11 @@ const router = express.Router();
 
 // router.param('id', tourController.checkId);
 
+// Aliasing for common requests
+router
+  .route('/top-5-cheap')
+  .get(tourController.aliasTopTours, tourController.getAllTours);
+
 router
   .route('/')
   .get(tourController.getAllTours)
