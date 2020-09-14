@@ -65,7 +65,7 @@ exports.getTour = async (req, res) => {
   } catch (err) {
     res.status(404).json({
       status: 'fail',
-      message: 'Tour not found',
+      message: err,
     });
   }
 };
@@ -99,10 +99,10 @@ exports.deleteTour = async (req, res) => {
       status: 'success',
       data: null,
     });
-  } catch (error) {
+  } catch (err) {
     res.status(404).json({
       status: 'fail',
-      message: 'Tour not found',
+      message: err,
     });
   }
 };
