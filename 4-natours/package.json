@@ -8,9 +8,9 @@
   "main": "server.js",
   "scripts": {
     "dev": "nodemon server.js",
-    "prod": "NODE_ENV=production node server.js",
+    "prod": "NODE_ENV=production nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "debug": "ndb server.js"
+    "debug": "NODE_ENV=production ndb server.js"
   },
   "author": "Steve Kedzie",
   "license": "ISC",
