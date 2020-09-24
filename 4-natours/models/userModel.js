@@ -24,9 +24,8 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: [true, 'A user must have a password'],
-    //trim: true,
-    //maxlength: [40, 'A password must have less than 41 characters'],
-    //minlength: [8, 'A password must have at least 8 characters'],
+    minlength: [8, 'A password must have at least 8 characters'],
+    select: false,
   },
   passwordConfirm: {
     type: String,
@@ -38,9 +37,6 @@ const userSchema = new mongoose.Schema({
       },
       message: 'Passwords do not match',
     },
-    //trim: true,
-    //maxlength: [40, 'A password must have less than 41 characters'],
-    //minlength: [8, 'A password must have at least 8 characters'],
   },
   photo: {
     type: String,
@@ -58,6 +54,14 @@ userSchema.pre('save', async function (next) {
   this.passwordConfirm = undefined;
   next();
 });
+
+// Instance method
+userSchema.methods.correctPassword = async function (
+  candidatePassword,
+  userPassword
+) {
+  return await bcrypt.compare(candidatePassword, userPassword);
+};
 
 const User = mongoose.model('User', userSchema);
 
