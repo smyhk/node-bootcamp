@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
-// const validator = require('validator');
 
 const tourSchema = new mongoose.Schema(
   {
@@ -77,16 +76,6 @@ const tourSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    // createdAt: {
-    //   type: Date,
-    //   default: Date.now(),
-    //   select: false,
-    // },
-    // updatedAt: {
-    //   type: Date,
-    //   default: Date.now(),
-    //   select: false,
-    // },
   },
   {
     timestamps: true,
@@ -105,17 +94,6 @@ tourSchema.pre('save', function (next) {
   next();
 });
 
-// tourSchema.pre('save', function (next) {
-//   console.log('will save document');
-//   next();
-// });
-
-// // Runs after save
-// tourSchema.post('save', function (doc, next) {
-//   console.log(doc);
-//   next();
-// });
-
 // QUERY middleware, this -> query objects
 /* matches any queries that start with 'find' */
 tourSchema.pre(/^find/, function (next) {
@@ -127,7 +105,6 @@ tourSchema.pre(/^find/, function (next) {
 
 tourSchema.post(/^find/, function (docs, next) {
   console.log(`Query took ${Date.now() - this.start} milliseconds`);
-  // console.log(docs);
   next();
 });
 

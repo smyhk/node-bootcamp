@@ -9,7 +9,6 @@ const userSchema = new mongoose.Schema({
     trim: true,
     maxlength: [40, 'A user name must have less than 41 characters'],
     minlength: [3, 'A user name must have at least 10 characters'],
-    // validate: [validator.isAlpha, 'Tour name must only contain letters'],
   },
   email: {
     type: String,
@@ -38,16 +37,17 @@ const userSchema = new mongoose.Schema({
       message: 'Passwords do not match',
     },
   },
+  passwordChangedAt: Date,
   photo: {
     type: String,
   },
 });
 
 userSchema.pre('save', async function (next) {
-  // Runs only when password mofified
+  // Runs only when password has been modified
   if (!this.isModified('password')) return next();
 
-  // Hash passwoes with cost of 12
+  // Hash password with cost of 12
   this.password = await bcrypt.hash(this.password, 12);
 
   // Delete passwordConfirm field
@@ -55,12 +55,27 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-// Instance method
-userSchema.methods.correctPassword = async function (
+// Instance methods
+userSchema.methods.isCorrectPassword = async function (
   candidatePassword,
   userPassword
 ) {
   return await bcrypt.compare(candidatePassword, userPassword);
+};
+
+userSchema.methods.hasChangedPasswordAfter = function (JWTTimestamp) {
+  if (this.passwordChangedAt) {
+    const convertedTimestamp = parseInt(
+      this.passwordChangedAt.getTime() / 1000,
+      10
+    );
+
+    // Password was changed since token was issued
+    return JWTTimestamp < convertedTimestamp;
+  }
+
+  // Password has never been chnaged
+  return false;
 };
 
 const User = mongoose.model('User', userSchema);
