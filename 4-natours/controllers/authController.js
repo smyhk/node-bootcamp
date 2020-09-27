@@ -12,6 +12,18 @@ const signToken = (id) => {
   });
 };
 
+const createSendToken = (user, statusCode, res) => {
+  const token = signToken(user._id);
+
+  res.status(statusCode).json({
+    status: 'success',
+    token: token,
+    data: {
+      user: user,
+    },
+  });
+};
+
 exports.signup = catchAsync(async (req, res, next) => {
   const newUser = await User.create({
     name: req.body.name,
@@ -21,15 +33,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     role: req.body.role,
   });
 
-  const token = signToken(newUser._id);
-
-  res.status(201).json({
-    status: 'success',
-    token: token,
-    data: {
-      user: newUser,
-    },
-  });
+  createSendToken(newUser, 201, res);
 });
 
 exports.login = catchAsync(async (req, res, next) => {
@@ -48,11 +52,7 @@ exports.login = catchAsync(async (req, res, next) => {
   }
 
   // 3) If everything is ok, send token to client
-  const token = signToken(user._id);
-  res.status(200).json({
-    status: 'success',
-    token: token,
-  });
+  createSendToken(user, 200, res);
 });
 
 exports.protect = catchAsync(async (req, res, next) => {
@@ -158,7 +158,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
     passwordResetExpires: { $gt: Date.now() },
   });
 
-  // 2) Set new  password if token and user
+  // 2) Set new password if user
   if (!user) {
     return next(new AppError('Token is invalid or has expired.', 400));
   }
@@ -169,12 +169,30 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   user.passwordResetExpires = undefined;
   await user.save();
 
-  // 3) Update changedPasswordAt prop for current user
+  // 3) Update changedPasswordAt prop for current user - User model
 
   // 4) Log user in, send token
-  const token = signToken(user._id);
-  res.status(200).json({
-    status: 'success',
-    token: token,
-  });
+  createSendToken(user, 201, res);
+});
+
+exports.updatePassword = catchAsync(async (req, res, next) => {
+  // 1) Get user from db
+  const user = await User.findById(req.user.id).select('+password');
+
+  // 2) Check current password
+  // const { currentPassword } = req.body.currentPassword;
+  if (
+    !(await user.isCorrectPassword(req.body.currentPassword, user.password))
+  ) {
+    return next(new AppError('Your current password is wrong.', 401));
+  }
+
+  // 3) Update user's password
+  user.password = req.body.password;
+  user.passwordConfirm = req.body.passwordConfirm;
+  await user.save();
+  // User.findByIdAndUpdate will not work as intended
+
+  // 4) Login user in, send token
+  createSendToken(user, 200, res);
 });
