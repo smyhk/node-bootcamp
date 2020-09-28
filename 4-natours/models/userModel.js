@@ -75,6 +75,12 @@ userSchema.pre('save', function (next) {
   next();
 });
 
+// Applies to queries that start with `find`
+userSchema.pre(/^find/, function (next) {
+  this.find({ isActive: { $ne: false } });
+  next();
+});
+
 // Instance methods
 userSchema.methods.isCorrectPassword = async function (
   candidatePassword,
