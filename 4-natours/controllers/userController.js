@@ -24,7 +24,7 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.updateMe = async (req, res, next) => {
+exports.updateMe = catchAsync(async (req, res, next) => {
   // 1) Create error if user attempts to update password
   if (req.body.password || req.body.passwordConfirm) {
     return next(
@@ -50,7 +50,7 @@ exports.updateMe = async (req, res, next) => {
       user: updatedUser,
     },
   });
-};
+});
 
 exports.createUser = (req, res) => {
   res.status(500).json({
@@ -72,6 +72,8 @@ exports.updateUser = (req, res) => {
     message: 'not implemented',
   });
 };
+
+exports.deleteMe;
 
 exports.deleteUser = (req, res) => {
   res.status(500).json({
