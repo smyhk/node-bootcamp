@@ -35,14 +35,17 @@ const reviewSchema = mongoose.Schema(
   }
 );
 
-// reviewSchema.pre(/^find/, function (next) {
-//   this.populate({
-//     path: 'tour',
-//     select: '-__v',
-//   });
+reviewSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'tour',
+    select: 'name',
+  }).populate({
+    path: 'user',
+    select: 'name photo',
+  });
 
-//   next();
-// });
+  next();
+});
 
 // reviewSchema.pre(/^find/, function (next) {
 //   this.populate({
