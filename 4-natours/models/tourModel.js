@@ -120,6 +120,7 @@ tourSchema.pre('save', async function (next) {
   next();
 });
 
+// This was used for embedding
 // tourSchema.pre('save', async function (next) {
 //   const guidesPromises = this.guides.map(async (id) => await User.findById(id));
 //   this.guides = await Promise.all(guidesPromises);
