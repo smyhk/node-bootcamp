@@ -1,6 +1,7 @@
 const User = require('../models/userModel');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
+const factory = require('./handlerFactory');
 
 // Filters out unwanted fields
 const filterObj = (obj, ...allowedFields) => {
@@ -83,9 +84,4 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.deleteUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'not implemented',
-  });
-};
+exports.deleteUser = factory.deleteOne(User);
