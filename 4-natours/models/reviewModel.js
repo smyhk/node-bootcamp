@@ -89,6 +89,9 @@ reviewSchema.statics.calcAverageRating = async function (tourId) {
   }
 };
 
+// Prevent users from reviewing the same tour more than once
+reviewSchema.index({ tour: 1, user: 1 }, { unique: true });
+
 // Calls the static calcAverageRating method after a new review is created
 reviewSchema.post('save', function () {
   // this -> current review
