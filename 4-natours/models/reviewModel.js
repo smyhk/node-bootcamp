@@ -75,18 +75,38 @@ reviewSchema.statics.calcAverageRating = async function (tourId) {
       },
     },
   ]);
-  console.log(stats);
 
-  await Tour.findByIdAndUpdate(tourId, {
-    ratingsQuantity: stats[0].numRatings,
-    ratingsAverage: stats[0].avgRating,
-  });
+  if (stats.length > 0) {
+    await Tour.findByIdAndUpdate(tourId, {
+      ratingsQuantity: stats[0].numRatings,
+      ratingsAverage: stats[0].avgRating,
+    });
+  } else {
+    await Tour.findByIdAndUpdate(tourId, {
+      ratingsQuantity: 0,
+      ratingsAverage: 4.5,
+    });
+  }
 };
 
 // Calls the static calcAverageRating method after a new review is created
 reviewSchema.post('save', function () {
   // this -> current review
   this.constructor.calcAverageRating(this.tour);
+});
+
+// 1)
+// Capture the query object when a rating is updated or deleted
+// Append the the query object to the r prop on `this`
+reviewSchema.pre(/^findOneAnd/, async function (next) {
+  this.r = await this.findOne();
+  next();
+});
+
+// 2)
+// Executes the calcAverageRating method on the query in `r` prop on `this`
+reviewSchema.post(/^findOneAnd/, async function () {
+  await this.r.constructor.calcAverageRating(this.r.tour);
 });
 
 const Review = mongoose.model('Review', reviewSchema);
