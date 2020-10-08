@@ -10,7 +10,7 @@
     "dev": "nodemon server.js",
     "prod": "NODE_ENV=production nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "debug": "NODE_ENV=production ndb server.js"
+    "debug": "ndb server.js"
   },
   "author": "Steve Kedzie",
   "license": "ISC",
