@@ -20,13 +20,13 @@ app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
 // GLOBAL middleware stack
-// Serving static files
+// Serving static files (css, img, etc.)
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Sets security http headers
 app.use(helmet());
 
-// Development loggin
+// Development logging
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
@@ -70,8 +70,12 @@ app.use((req, res, next) => {
 });
 
 // Routes
+// Render base template
 app.get('/', (req, res) => {
-  res.status(200).render('base');
+  res.status(200).render('base', {
+    tour: 'The Forest Hiker',
+    user: 'Steve',
+  });
 });
 
 app.use('/api/v1/tours', tourRouter);
