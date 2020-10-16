@@ -26,6 +26,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Sets security http headers
 app.use(helmet());
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'", 'https:', 'http:', 'data:', 'ws:'],
+      baseUri: ["'self'"],
+      fontSrc: ["'self'", 'https:', 'http:', 'data:'],
+      scriptSrc: ["'self'", 'https:', 'http:', 'blob:'],
+      styleSrc: ["'self'", 'https:', 'http:', "'unsafe-inline'"],
+    },
+  })
+);
 
 // Development logging
 if (process.env.NODE_ENV === 'development') {
