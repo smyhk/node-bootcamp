@@ -49,6 +49,7 @@ exports.signup = catchAsync(async (req, res, next) => {
   createSendToken(newUser, 201, res);
 });
 
+// Login users
 exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
 
@@ -67,6 +68,18 @@ exports.login = catchAsync(async (req, res, next) => {
   // 3) If everything is ok, send token to client
   createSendToken(user, 200, res);
 });
+
+// Logout users
+exports.logout = (req, res) => {
+  res.cookie('jwt', 'loggedout', {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+  });
+
+  res.status(200).json({
+    status: 'success',
+  });
+};
 
 // Must be authenticated
 exports.protect = catchAsync(async (req, res, next) => {
