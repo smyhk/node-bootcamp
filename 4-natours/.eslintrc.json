@@ -1,7 +1,13 @@
 {
+  "env": {
+    "es6": true,
+    "node": true,
+    "browser": true
+  },
   "extends": ["airbnb", "prettier", "plugin:node/recommended"],
   "plugins": ["prettier"],
   "rules": {
+    "sourceType": "module",
     "prettier/prettier": "error",
     "spaced-comment": "off",
     "no-console": "warn",
