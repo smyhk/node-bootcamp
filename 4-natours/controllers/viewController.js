@@ -46,21 +46,23 @@ exports.getAccount = (req, res) => {
   });
 }
 
-exports.updateUserData = catchAsync(async (req, res, next) => {
-  const updatedUser = await User.findByIdAndUpdate(
-    req.user.id,
-    {
-      name: req.body.name,
-      email: req.body.email
-    },
-    {
-      new: true,
-      runValidators: true
-    }
-  );
+// Needed for urlencoded data updates
+// exports.updateUserData = catchAsync(async (req, res, next) => {
+//   const updatedUser = await User.findByIdAndUpdate(
+//     req.user.id,
+//     {
+//       name: req.body.name,
+//       email: req.body.email
+//     },
+//     {
+//       new: true,
+//       runValidators: true
+//     }
+//   );
 
-  res.status(200).render('account', {
-    title: 'Your account',
-    user: updatedUser
-  });
-});
+//   res.status(200).render('account', {
+//     status: 'success',
+//     title: 'Your account',
+//     user: updatedUser
+//   });
+// });

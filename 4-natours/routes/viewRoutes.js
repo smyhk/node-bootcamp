@@ -16,6 +16,7 @@ router.get('/login', authController.isLoggedIn, viewController.getLoginForm);
 // Current user
 router.get('/me', authController.protect, viewController.getAccount);
 
-router.post('/submit-user-data', authController.protect, viewController.updateUserData);
+// Needed to urlecoded data
+// router.post('/submit-user-data', authController.protect, viewController.updateUserData);
 
 module.exports = router;
