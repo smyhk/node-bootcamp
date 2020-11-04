@@ -6,7 +6,7 @@ import { logout } from './login';
 
 // DOM elements
 const mapBox = document.getElementById('map');
-const loginForm = document.querySelector('.form');
+const loginForm = document.querySelector('.form--login');
 const logoutButton = document.querySelector('.nav__el--logout');
 
 // Delegation - only execute if these elements exist
