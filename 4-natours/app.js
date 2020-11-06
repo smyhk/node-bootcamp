@@ -22,6 +22,7 @@ app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
 // GLOBAL middleware stack
+
 // Serving static files (css, img, etc.)
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -54,7 +55,7 @@ app.use('/api', limiter);
 
 // Body parser - reads data from body into req.body
 app.use(express.json({ limit: '10kb' }));
-app.use(express.urlencoded({ extended: true, limit: '10kb' }));
+// app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 app.use(cookieParser());
 
 // Data sanitization against NoSQL query injection
@@ -80,7 +81,7 @@ app.use(
 // Test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toLocaleString();
-  console.info(req.cookies);
+  console.info('cookie', req.cookies);
   next();
 });
 
