@@ -240,8 +240,6 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   // 1) Get user from db
   const user = await User.findById(req.user.id).select('+password');
 
-  console.log('in auth controller', user)
-
   // 2) Check current password
   // const { currentPassword } = req.body.currentPassword;
   if (
