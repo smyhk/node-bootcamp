@@ -1,6 +1,9 @@
 const express = require('express');
+const multer = require('multer');
 const userController = require('../controllers/userController');
 const authController = require('../controllers/authController');
+
+const uploader = multer({ dest: 'public/img/users' });
 
 const router = express.Router();
 
@@ -16,7 +19,7 @@ router.use(authController.protect);
 router.patch('/update-password', authController.updatePassword);
 
 router.get('/me', userController.getMe, userController.getUser);
-router.patch('/update-me', userController.updateMe);
+router.patch('/update-me', uploader.single('photo'), userController.updateMe);
 router.patch('/delete-me', userController.deleteMe);
 
 // Restrict to admins only

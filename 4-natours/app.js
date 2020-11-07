@@ -81,7 +81,7 @@ app.use(
 // Test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toLocaleString();
-  console.info('cookie', req.cookies);
+  // console.info('cookie', req.cookies);
   next();
 });
 
