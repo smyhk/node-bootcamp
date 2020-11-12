@@ -31,9 +31,17 @@ if (logoutButton) logoutButton.addEventListener('click', logout);
 if (updateDataForm) {
   updateDataForm.addEventListener('submit', (e) => {
     e.preventDefault();
+    const form = new FormData();
+
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
-    updateData({ name, email }, 'data');
+    const photo = document.getElementById('photo').files[0];
+
+    form.append('name', name);
+    form.append('email', email);
+    form.append('photo', photo);
+
+    updateData(form, 'data');
   })
 }
 
