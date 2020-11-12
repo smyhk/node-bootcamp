@@ -4,7 +4,7 @@ const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 const factory = require('./handlerFactory');
 
-// User photo uploader
+// User photo uploader, storage, and filter
 const multerStorage = multer.diskStorage({
   destination: (req, file, callback) => {
     callback(null, 'public/img/users');
@@ -29,6 +29,10 @@ const uploader = multer({
 });
 
 exports.uploadUserPhoto = uploader.single('photo')
+
+exports.resizeUserPhoto = (req, res, next) => {
+
+}
 
 // Filters out unwanted fields
 const filterObj = (obj, ...allowedFields) => {
@@ -61,6 +65,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 
   // 2) Filter out unwanted fields
   const filteredBody = filterObj(req.body, 'name', 'email');
+  if (req.file) filteredBody.photo = req.file.fileName;
 
   // 3) Update user document
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
