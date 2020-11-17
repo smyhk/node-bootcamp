@@ -30,9 +30,9 @@ module.exports = class Email {
   async sendEmail(template, subject) {
     // 1) Render html based on pug template
     const html = pug.renderFile(`${__dirname}/../views/email/${template}.pug`, {
-      firstName = this.firstName,
+      firstName: this.firstName,
       url: this.url,
-      subject
+      subject: subject,
     });
 
     // 2) Define email options
