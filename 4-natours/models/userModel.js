@@ -43,11 +43,11 @@ const userSchema = new mongoose.Schema({
     enum: ['user', 'guide', 'lead-guid', 'admin'],
     default: 'user',
   },
-  passwordChangedAt: Date,
   photo: {
     type: String,
     default: 'default.jpg',
   },
+  passwordChangedAt: Date,
   passwordResetToken: String,
   passwordResetExpires: Date,
   isActive: {
