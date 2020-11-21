@@ -30,8 +30,9 @@ bookingSchema.pre(/^find/, function (next) {
     path: 'tour',
     select: 'name',
   });
+  next();
 });
 
-const Booking = mongoose.Model('Booking', bookingSchema);
+const Booking = mongoose.model('Booking', bookingSchema);
 
 module.exports = Booking;
