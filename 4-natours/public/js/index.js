@@ -1,5 +1,6 @@
 /* eslint-disable */
 import '@babel/polyfill';
+import { bookTour } from './stripe';
 import { displayMap } from './mapbox';
 import { login, logout } from './login';
 import { updateData } from './updateSettings';
@@ -7,6 +8,7 @@ import { updateData } from './updateSettings';
 // DOM elements
 const mapBox = document.getElementById('map');
 const loginForm = document.querySelector('.form--login');
+const bookButton = document.getElementById('book-tour');
 const logoutButton = document.querySelector('.nav__el--logout');
 const updateDataForm = document.querySelector('.form-user-data');
 const userPasswordForm = document.querySelector('.form-user-password');
@@ -42,11 +44,11 @@ if (updateDataForm) {
     form.append('photo', photo);
 
     updateData(form, 'data');
-  })
+  });
 }
 
 if (userPasswordForm)
-  userPasswordForm.addEventListener('submit', async e => {
+  userPasswordForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     document.querySelector('.btn--save-password').textContent = 'Updating...';
 
@@ -62,4 +64,11 @@ if (userPasswordForm)
     document.getElementById('password-current').value = '';
     document.getElementById('password').value = '';
     document.getElementById('password-confirm').value = '';
+  });
+
+if (bookButton)
+  bookButton.addEventListener('click', (e) => {
+    e.target.textContent = 'Processing...';
+    const { tourId } = e.target.dataset;
+    bookTour(tourId);
   });
