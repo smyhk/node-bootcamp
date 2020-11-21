@@ -9,14 +9,14 @@ export const bookTour = async (tourId) => {
   try {
     // 1) Get checkout session from endpoint
     const session = await axios(`/api/v1/bookings/checkout-session/${tourId}`);
-    console.log(session);
+    // console.log(session);
 
     // 2) Create checkout form + process + charge credid card
     await stripe.redirectToCheckout({
       sessionId: session.data.session.id,
     });
   } catch (err) {
-    console.error(err);
+    // console.error(err);
     showAlert('error', err);
   }
 };
